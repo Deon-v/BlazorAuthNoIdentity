@@ -1,12 +1,15 @@
+using BlazorAuthNoIdentity.Server.Data;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using BlazorAuthNoIdentity.Server.Data;
+
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("BlazorAuthNoIdentityServerContextConnection");builder.Services.AddDbContext<BlazorAuthNoIdentityServerContext>(options =>
-    options.UseSqlite(connectionString));builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<BlazorAuthNoIdentityServerContext>();
+var connectionString = builder.Configuration.GetConnectionString("BlazorAuthNoIdentityServerContextConnection");
+builder.Services.AddDbContext<DataContext>(options =>
+    options.UseInMemoryDatabase(connectionString));
+
+builder.Services.AddScoped<SeedData>();
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
